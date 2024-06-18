@@ -19,7 +19,7 @@ app.post("/submit", (req, res) => {
   const newBlog = { title: req.body["Title"], content: req.body["textarea"] };
   blogs.push(newBlog);
   console.log(blogs);
-  res.redirect("/view");
+  res.redirect("/view.ejs");
 });
 
 app.get("/view", (req, res) => {
