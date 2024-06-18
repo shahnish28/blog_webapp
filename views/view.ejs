@@ -1,3 +1,4 @@
+<%- include("partials/header.ejs") %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,33 +8,74 @@
   </head>
   <body>
     <h1>Your Blogs</h1>
-    <% if(blogs.length!==0){ %> <% blogs.forEach((e,index) => { %>
-
-    <h1><%= e.title %></h1>
-    <%= e.content %>
-    <a href="/update"
-      ><button style="border-color: rgb(150, 150, 199)">Edit</button></a
-    >
-    <button
-      onclick="onDelete(blogs,index)"
-      style="border-color: rgb(231, 113, 113)"
-    >
-      Delete
-    </button>
-
-    <br />
-    <hr />
-    <%});%> <%} else { %>
-    <hr />
-    <br />
-    <h3>no blogs to display</h3>
-    <%}%>
-
+    <div class="blogs-container" id="blogs-container">
+      <% if (blogs.length !== 0) { %> <% blogs.forEach((e, index) => { %>
+      <div class="blog-post">
+        <h1><%= e.title %></h1>
+        <p><%= e.content %></p>
+        <a href="/update"
+          ><button style="border-color: rgb(150, 150, 199)">Edit</button></a
+        >
+        <button
+          style="border-color: rgb(231, 113, 113)"
+          onclick="deleteBlog(<%= index %>)"
+        >
+          Delete
+        </button>
+        <br />
+        <hr />
+      </div>
+      <% }); %> <% } else { %>
+      <hr />
+      <br />
+      <h3>No blogs to display</h3>
+      <% } %>
+    </div>
     <a href="/create"
-      ><button style="background-color: rgb(182, 114, 114)">back</button></a
+      ><button style="background-color: rgb(182, 114, 114)">Back</button></a
     >
     <a href="/"
-      ><button style="background-color: rgb(126, 194, 126)">Home</button>
-    </a>
+      ><button style="background-color: rgb(126, 194, 126)">Home</button></a
+    >
   </body>
+  <script>
+    const blogs = [
+      { title: "blog1", content: "jnwsnx" },
+      { title: "blog2", content: "jnwsnx" },
+    ];
+
+    function deleteBlog(index) {
+      blogs.splice(index, 1);
+      displayBlogs();
+    }
+
+    function displayBlogs() {
+      const container = document.getElementById("blogs-container");
+      container.innerHTML = "";
+
+      if (blogs.length === 0) {
+        container.innerHTML = "<hr /><br /><h3>No blogs to display</h3>";
+      } else {
+        blogs.forEach((blog, index) => {
+          const blogPost = document.createElement("div");
+          blogPost.className = "blog-post";
+
+          blogPost.innerHTML = `
+                    <h1>${blog.title}</h1>
+                    <p>${blog.content}</p>
+                    <a href="/update"><button style="border-color: rgb(150, 150, 199)">Edit</button></a>
+                    <button style="border-color: rgb(231, 113, 113)" onclick="deleteBlog(${index})">Delete</button>
+                    <br />
+                    <hr />
+                `;
+
+          container.appendChild(blogPost);
+        });
+      }
+    }
+
+    // Call displayBlogs to initially display the blogs
+    displayBlogs();
+  </script>
 </html>
+<%- include("partials/footer.ejs") %>
